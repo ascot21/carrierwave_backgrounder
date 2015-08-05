@@ -109,7 +109,10 @@ module CarrierWave
             end
 
             def enqueue_#{column}_background_job
-              CarrierWave::Backgrounder.enqueue_for_backend(#{worker}, self.class.name, id.to_s, #{column}.mounted_as)
+              uploader = self.#{column}.is_a?(Array) ? self.#{column}.first : self.#{column}
+              if uploader.present?
+                CarrierWave::Backgrounder.enqueue_for_backend(#{worker}, self.class.name, id.to_s, uploader.mounted_as)
+              end
             end
           RUBY
         end

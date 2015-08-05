@@ -21,7 +21,8 @@ module CarrierWave
 
             send(:"#{serialization_column}_changed?") ||              # after_save support
             previous_changes.has_key?(:"#{serialization_column}") ||  # after_commit support
-            send(:"remote_#{column}_url").present? ||                 # Remote upload support
+            try(:"remote_#{column}_url").present? ||                  # Remote upload support
+            try(:"remote_#{column}_urls").present? ||                 # Remote upload support for multiple
             send(:"#{column}_cache").present?                         # Form failure support
           end
         end
